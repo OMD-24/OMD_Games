@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Red Light Green Light | 무궁화 꽃이 피었습니다</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Noto Sans KR", Arial, sans-serif;
+        background: linear-gradient(135deg, #87ceeb 0%, #98fb98 100%);
+        overflow: hidden;
+        user-select: none;
+        height: 100vh;
+      }
+
+      .game-container {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.1) 1px,
+            transparent 1px
+          ),
+          linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+      }
+
+      /* Doll */
+      .doll-container {
+        position: absolute;
+        top: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 10;
+      }
+
+      .doll {
+        width: 200px;
+        height: 280px;
+        position: relative;
+        transition: transform 0.5s ease;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+      }
+
+      .doll.looking {
+        transform: scaleX(-1);
+      }
+
+      .doll-head {
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+          circle at 30% 30%,
+          #ffe4e1,
+          #ffb6c1,
+          #ff8fa3
+        );
+        border-radius: 50%;
+        margin: 0 auto 5px;
+        position: relative;
+        border: 4px solid #ff1493;
+        box-shadow: inset 0 5px 15px rgba(255, 255, 255, 0.3),
+          0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .doll-hair {
+        position: absolute;
+        top: -10px;
+        left: 10px;
+        right: 10px;
+        height: 40px;
+        background: linear-gradient(135deg, #8b4513, #d2691e);
+        border-radius: 50px 50px 20px 20px;
+        border: 2px solid #654321;
+      }
+
+      .doll-hair::before {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 15px;
+        right: 15px;
+        height: 20px;
+        background: linear-gradient(135deg, #a0522d, #deb887);
+        border-radius: 20px;
+      }
+
+      .doll-eyes {
+        position: absolute;
+        top: 35px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .eye {
+        width: 18px;
+        height: 18px;
+        background: radial-gradient(circle at 30% 30%, #fff, #000);
+        border-radius: 50%;
+        border: 2px solid #000;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .eye::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 8px;
+        height: 8px;
+        background: #000;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .eye::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 5px;
+        width: 3px;
+        height: 3px;
+        background: #fff;
+        border-radius: 50%;
+      }
+
+      .doll.looking .eye {
+        background: radial-gradient(
+          circle at 50% 50%,
+          #ff4500,
+          #ff0000,
+          #8b0000
+        );
+        box-shadow: 0 0 15px #ff0000, inset 0 0 10px #ff4500;
+        border-color: #8b0000;
+      }
+
+      .doll.looking .eye::before {
+        background: #ffff00;
+        box-shadow: 0 0 8px #ffff00;
+      }
+
+      .doll-nose {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 6px;
+        background: #ff8fa3;
+        border-radius: 50%;
+        border: 1px solid #ff69b4;
+      }
+
+      .doll-mouth {
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 25px;
+        height: 12px;
+        border-radius: 0 0 25px 25px;
+        background: #8b0000;
+        border: 2px solid #000;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      .doll-mouth::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 3px;
+        right: 3px;
+        height: 4px;
+        background: #ff69b4;
+        border-radius: 10px;
+      }
+
+      .doll-body {
+        width: 80px;
+        height: 100px;
+        background: linear-gradient(135deg, #ff1493, #ff69b4, #ffb6c1);
+        margin: 0 auto;
+        border-radius: 15px;
+        border: 3px solid #dc143c;
+        position: relative;
+        box-shadow: inset 0 5px 15px rgba(255, 255, 255, 0.3),
+          0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .doll-body::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #ff69b4, #ffb6c1);
+        border-radius: 50%;
+        border: 2px solid #ff1493;
+      }
+
+      .doll-body::after {
+        content: "";
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 20px;
+        background: #ff1493;
+        border-radius: 20px;
+        border: 1px solid #dc143c;
+      }
+
+      .doll-arms {
+        position: absolute;
+        top: 110px;
+        left: -15px;
+        right: -15px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .arm {
+        width: 20px;
+        height: 70px;
+        background: linear-gradient(135deg, #ffe4e1, #ffb6c1);
+        border-radius: 10px;
+        border: 2px solid #ff69b4;
+        position: relative;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .arm::before {
+        content: "";
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 16px;
+        height: 16px;
+        background: radial-gradient(circle, #ffb6c1, #ff8fa3);
+        border-radius: 50%;
+        border: 1px solid #ff69b4;
+      }
+
+      .doll-legs {
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .leg {
+        width: 22px;
+        height: 60px;
+        background: linear-gradient(135deg, #ffe4e1, #ffb6c1);
+        border-radius: 10px;
+        border: 2px solid #ff69b4;
+        position: relative;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .leg::before {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 26px;
+        height: 12px;
+        background: #8b4513;
+        border-radius: 15px;
+        border: 1px solid #654321;
+      }
+
+      /* Game Status */
+      .status {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        z-index: 100;
+      }
+
+      .light-indicator {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .light-green {
+        background: #00ff00;
+        box-shadow: 0 0 20px #00ff00;
+      }
+
+      .light-red {
+        background: #ff0000;
+        box-shadow: 0 0 20px #ff0000;
+      }
+
+      /* Player */
+      .player {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 80px;
+        transition: bottom 0.5s ease, left 0.5s ease;
+        z-index: 5;
+        filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
+      }
+
+      .player-head {
+        width: 28px;
+        height: 28px;
+        background: radial-gradient(
+          circle at 30% 30%,
+          #ffdab9,
+          #deb887,
+          #cd853f
+        );
+        border-radius: 50%;
+        margin: 0 auto 3px;
+        border: 2px solid #8b7355;
+        position: relative;
+        box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.3);
+      }
+
+      .player-head::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 2px;
+        right: 2px;
+        height: 15px;
+        background: linear-gradient(135deg, #4b0082, #2f0a3e);
+        border-radius: 15px 15px 5px 5px;
+        border: 1px solid #1a0120;
+      }
+
+      .player-head::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 6px;
+        right: 6px;
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          #000 2px,
+          transparent 2px,
+          transparent 4px,
+          #000 4px,
+          #000 6px,
+          transparent 6px,
+          transparent 8px,
+          #000 8px
+        );
+        background-size: 8px 1px;
+        background-repeat: repeat-x;
+        border-radius: 2px;
+      }
+
+      .player-eyes {
+        position: absolute;
+        top: 10px;
+        left: 6px;
+        right: 6px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .player-eye {
+        width: 4px;
+        height: 4px;
+        background: #000;
+        border-radius: 50%;
+      }
+
+      .player-nose {
+        position: absolute;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 2px;
+        background: #cd853f;
+        border-radius: 50%;
+      }
+
+      .player-mouth {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 3px;
+        border-radius: 0 0 8px 8px;
+        background: #8b4513;
+        border: 1px solid #654321;
+      }
+
+      .player-body {
+        width: 25px;
+        height: 35px;
+        background: linear-gradient(135deg, #32cd32, #228b22, #006400);
+        margin: 0 auto 5px;
+        border-radius: 8px;
+        border: 2px solid #228b22;
+        position: relative;
+        box-shadow: inset 0 3px 8px rgba(255, 255, 255, 0.2),
+          0 3px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .player-body::before {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 15px;
+        height: 15px;
+        background: linear-gradient(135deg, #90ee90, #32cd32);
+        border-radius: 50%;
+        border: 1px solid #228b22;
+      }
+
+      .player-body::after {
+        content: "";
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 8px;
+        background: #228b22;
+        border-radius: 2px;
+      }
+
+      .player-arms {
+        position: absolute;
+        top: 33px;
+        left: -8px;
+        right: -8px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .player-arm {
+        width: 12px;
+        height: 25px;
+        background: linear-gradient(135deg, #ffdab9, #deb887);
+        border-radius: 6px;
+        border: 1px solid #cd853f;
+        position: relative;
+      }
+
+      .player-arm::before {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 8px;
+        background: radial-gradient(circle, #deb887, #cd853f);
+        border-radius: 50%;
+        border: 1px solid #8b7355;
+      }
+
+      .player-legs {
+        position: absolute;
+        bottom: 0;
+        left: 6px;
+        right: 6px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .player-leg {
+        width: 12px;
+        height: 20px;
+        background: linear-gradient(135deg, #ffdab9, #deb887);
+        border-radius: 6px;
+        border: 1px solid #cd853f;
+        position: relative;
+      }
+
+      .player-leg::before {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 14px;
+        height: 6px;
+        background: #000;
+        border-radius: 7px;
+        border: 1px solid #333;
+      }
+
+      .eliminated {
+        animation: elimination 0.5s ease-out;
+      }
+
+      @keyframes elimination {
+        0% {
+          transform: translateX(-50%) scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: translateX(-50%) scale(1.2);
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateX(-50%) scale(0);
+          opacity: 0;
+        }
+      }
+
+      /* Controls */
+      .controls {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+
+      .control-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .control-btn {
+        padding: 10px 15px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.2s ease;
+      }
+
+      .control-btn:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+      }
+
+      .control-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Game Over Screen */
+      .game-over {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .game-over-content {
+        text-align: center;
+        color: white;
+        font-size: 24px;
+      }
+
+      .game-over h2 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #ff0000;
+      }
+
+      .restart-btn {
+        padding: 15px 30px;
+        font-size: 18px;
+        background: #ff0000;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .restart-btn:hover {
+        background: #cc0000;
+        transform: scale(1.05);
+      }
+
+      /* Victory Screen */
+      .victory {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(45deg, #ffd700, #ffa500);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .victory-content {
+        text-align: center;
+        color: #000;
+        font-size: 24px;
+      }
+
+      .victory h2 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #008000;
+        animation: celebrate 1s ease-in-out infinite alternate;
+      }
+
+      @keyframes celebrate {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.1);
+        }
+      }
+
+      /* Progress Bar */
+      .progress-container {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 200px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        color: white;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 20px;
+        background: #333;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: #4caf50;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      /* Instructions */
+      .instructions {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        z-index: 200;
+        max-width: 400px;
+      }
+
+      .instructions h3 {
+        color: #ff0000;
+        margin-bottom: 15px;
+        font-size: 24px;
+      }
+
+      .instructions p {
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      .start-btn {
+        padding: 15px 30px;
+        font-size: 18px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .start-btn:hover {
+        background: #45a049;
+        transform: scale(1.05);
+      }
+
+      /* Mobile Controls */
+      @media (max-width: 768px) {
+        .controls {
+          bottom: 100px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .control-buttons {
+          justify-content: center;
+        }
+
+        .status {
+          font-size: 16px;
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <!-- Instructions -->
+      <div class="instructions" id="instructions">
+        <h3>무궁화 꽃이 피었습니다</h3>
+        <p><strong>Rules:</strong></p>
+        <p>
+          🟢 <strong>Green Light:</strong> Move forward using arrow keys or
+          buttons
+        </p>
+        <p>
+          🔴 <strong>Red Light:</strong> STOP! Don't move or you're eliminated
+        </p>
+        <p><strong>Goal:</strong> Reach the finish line (top of screen)</p>
+        <p>
+          <strong>Warning:</strong> The doll can see ANY movement during red
+          light!
+        </p>
+        <button class="start-btn" onclick="startGame()">Start Game</button>
+      </div>
+
+      <!-- Doll -->
+      <div class="doll-container">
+        <div class="doll" id="doll">
+          <div class="doll-head">
+            <div class="doll-hair"></div>
+            <div class="doll-eyes">
+              <div class="eye"></div>
+              <div class="eye"></div>
+            </div>
+            <div class="doll-nose"></div>
+            <div class="doll-mouth"></div>
+          </div>
+          <div class="doll-body"></div>
+          <div class="doll-arms">
+            <div class="arm"></div>
+            <div class="arm"></div>
+          </div>
+          <div class="doll-legs">
+            <div class="leg"></div>
+            <div class="leg"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="status">
+        <div>
+          <span class="light-indicator" id="lightIndicator"></span>
+          <span id="gameStatus">Ready to Start</span>
+        </div>
+        <div style="margin-top: 10px">Time: <span id="timer">0</span>s</div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-container">
+        <div>Progress to Finish Line</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div style="margin-top: 5px; font-size: 12px">
+          <span id="progressText">0%</span>
+        </div>
+      </div>
+
+      <!-- Player -->
+      <div class="player" id="player">
+        <div class="player-head">
+          <div class="player-eyes">
+            <div class="player-eye"></div>
+            <div class="player-eye"></div>
+          </div>
+          <div class="player-nose"></div>
+          <div class="player-mouth"></div>
+        </div>
+        <div class="player-body"></div>
+        <div class="player-arms">
+          <div class="player-arm"></div>
+          <div class="player-arm"></div>
+        </div>
+        <div class="player-legs">
+          <div class="player-leg"></div>
+          <div class="player-leg"></div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <div>Controls:</div>
+        <div class="control-buttons">
+          <button class="control-btn" onclick="movePlayer('up')">↑</button>
+          <button class="control-btn" onclick="movePlayer('left')">←</button>
+          <button class="control-btn" onclick="movePlayer('down')">↓</button>
+          <button class="control-btn" onclick="movePlayer('right')">→</button>
+        </div>
+        <div style="margin-top: 5px; font-size: 12px">Or use arrow keys</div>
+      </div>
+
+      <!-- Game Over Screen -->
+      <div class="game-over" id="gameOver">
+        <div class="game-over-content">
+          <h2>ELIMINATED!</h2>
+          <p>The doll saw you moving during red light!</p>
+          <p id="finalStats"></p>
+          <button class="restart-btn" onclick="restartGame()">Try Again</button>
+        </div>
+      </div>
+
+      <!-- Victory Screen -->
+      <div class="victory" id="victory">
+        <div class="victory-content">
+          <h2>CONGRATULATIONS!</h2>
+          <p>You survived the game!</p>
+          <p id="victoryStats"></p>
+          <button class="restart-btn" onclick="restartGame()">
+            Play Again
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let gameState = {
+        isGreenLight: false,
+        isGameActive: false,
+        playerPosition: { x: 50, y: 90 }, // percentage
+        gameStartTime: 0,
+        currentTimer: 0,
+        lightChangeTimeout: null,
+        dollLookTimeout: null,
+        gameInterval: null,
+        moveCount: 0,
+        isPlayerMoving: false,
+        lastMoveTime: 0,
+      };
+
+      const elements = {
+        player: document.getElementById("player"),
+        doll: document.getElementById("doll"),
+        lightIndicator: document.getElementById("lightIndicator"),
+        gameStatus: document.getElementById("gameStatus"),
+        timer: document.getElementById("timer"),
+        progressFill: document.getElementById("progressFill"),
+        progressText: document.getElementById("progressText"),
+        instructions: document.getElementById("instructions"),
+        gameOver: document.getElementById("gameOver"),
+        victory: document.getElementById("victory"),
+        finalStats: document.getElementById("finalStats"),
+        victoryStats: document.getElementById("victoryStats"),
+      };
+
+      function startGame() {
+        elements.instructions.style.display = "none";
+        gameState.isGameActive = true;
+        gameState.gameStartTime = Date.now();
+        gameState.playerPosition = { x: 50, y: 90 };
+        gameState.moveCount = 0;
+
+        updatePlayerPosition();
+        startGameTimer();
+        scheduleNextLightChange();
+
+        elements.gameStatus.textContent = "Game Started!";
+      }
+
+      function scheduleNextLightChange() {
+        if (!gameState.isGameActive) return;
+
+        const minTime = gameState.isGreenLight ? 2000 : 3000;
+        const maxTime = gameState.isGreenLight ? 5000 : 8000;
+        const randomTime = Math.random() * (maxTime - minTime) + minTime;
+
+        gameState.lightChangeTimeout = setTimeout(() => {
+          toggleLight();
+        }, randomTime);
+      }
+
+      function toggleLight() {
+        if (!gameState.isGameActive) return;
+
+        gameState.isGreenLight = !gameState.isGreenLight;
+
+        if (gameState.isGreenLight) {
+          // Green Light
+          elements.lightIndicator.className = "light-indicator light-green";
+          elements.gameStatus.textContent = "GREEN LIGHT - GO!";
+          elements.doll.classList.remove("looking");
+          playSound("greenLight");
+        } else {
+          // Red Light
+          elements.lightIndicator.className = "light-indicator light-red";
+          elements.gameStatus.textContent = "RED LIGHT - STOP!";
+          elements.doll.classList.add("looking");
+          playSound("redLight");
+
+          // Check if player was moving recently
+          if (
+            gameState.isPlayerMoving ||
+            Date.now() - gameState.lastMoveTime < 300
+          ) {
+            setTimeout(() => {
+              if (!gameState.isGreenLight && gameState.isGameActive) {
+                eliminatePlayer();
+              }
+            }, 500);
+          }
+        }
+
+        scheduleNextLightChange();
+      }
+
+      function movePlayer(direction) {
+        if (!gameState.isGameActive) return;
+
+        gameState.lastMoveTime = Date.now();
+        gameState.isPlayerMoving = true;
+        gameState.moveCount++;
+
+        // Check if moving during red light
+        if (!gameState.isGreenLight) {
+          eliminatePlayer();
+          return;
+        }
+
+        const moveDistance = 3;
+        let newX = gameState.playerPosition.x;
+        let newY = gameState.playerPosition.y;
+
+        switch (direction) {
+          case "up":
+            newY = Math.max(5, newY - moveDistance);
+            break;
+          case "down":
+            newY = Math.min(90, newY + moveDistance);
+            break;
+          case "left":
+            newX = Math.max(5, newX - moveDistance);
+            break;
+          case "right":
+            newX = Math.min(95, newX + moveDistance);
+            break;
+        }
+
+        gameState.playerPosition.x = newX;
+        gameState.playerPosition.y = newY;
+
+        updatePlayerPosition();
+        updateProgress();
+
+        // Check for victory
+        if (newY <= 15) {
+          victory();
+        }
+
+        // Reset moving flag after a short delay
+        setTimeout(() => {
+          gameState.isPlayerMoving = false;
+        }, 200);
+      }
+
+      function updatePlayerPosition() {
+        elements.player.style.left = gameState.playerPosition.x + "%";
+        elements.player.style.bottom = 100 - gameState.playerPosition.y + "%";
+      }
+
+      function updateProgress() {
+        const progress = Math.max(
+          0,
+          ((90 - gameState.playerPosition.y) / 75) * 100
+        );
+        elements.progressFill.style.width = progress + "%";
+        elements.progressText.textContent = Math.round(progress) + "%";
+      }
+
+      function eliminatePlayer() {
+        gameState.isGameActive = false;
+        elements.player.classList.add("eliminated");
+
+        clearTimeout(gameState.lightChangeTimeout);
+        clearTimeout(gameState.dollLookTimeout);
+        clearInterval(gameState.gameInterval);
+
+        playSound("elimination");
+
+        setTimeout(() => {
+          const timeElapsed = (
+            (Date.now() - gameState.gameStartTime) /
+            1000
+          ).toFixed(1);
+          const progress = Math.max(
+            0,
+            ((90 - gameState.playerPosition.y) / 75) * 100
+          );
+
+          elements.finalStats.innerHTML = `
+                    Time Survived: ${timeElapsed}s<br>
+                    Progress: ${Math.round(progress)}%<br>
+                    Moves Made: ${gameState.moveCount}
+                `;
+
+          elements.gameOver.style.display = "flex";
+        }, 1000);
+      }
+
+      function victory() {
+        gameState.isGameActive = false;
+
+        clearTimeout(gameState.lightChangeTimeout);
+        clearTimeout(gameState.dollLookTimeout);
+        clearInterval(gameState.gameInterval);
+
+        playSound("victory");
+
+        const timeElapsed = (
+          (Date.now() - gameState.gameStartTime) /
+          1000
+        ).toFixed(1);
+
+        elements.victoryStats.innerHTML = `
+                Completion Time: ${timeElapsed}s<br>
+                Total Moves: ${gameState.moveCount}<br>
+                🏆 YOU SURVIVED! 🏆
+            `;
+
+        elements.victory.style.display = "flex";
+      }
+
+      function restartGame() {
+        // Reset all game state
+        gameState = {
+          isGreenLight: false,
+          isGameActive: false,
+          playerPosition: { x: 50, y: 90 },
+          gameStartTime: 0,
+          currentTimer: 0,
+          lightChangeTimeout: null,
+          dollLookTimeout: null,
+          gameInterval: null,
+          moveCount: 0,
+          isPlayerMoving: false,
+          lastMoveTime: 0,
+        };
+
+        // Reset UI
+        elements.player.classList.remove("eliminated");
+        elements.doll.classList.remove("looking");
+        elements.lightIndicator.className = "light-indicator";
+        elements.gameStatus.textContent = "Ready to Start";
+        elements.timer.textContent = "0";
+        elements.progressFill.style.width = "0%";
+        elements.progressText.textContent = "0%";
+
+        // Hide screens
+        elements.gameOver.style.display = "none";
+        elements.victory.style.display = "none";
+        elements.instructions.style.display = "flex";
+
+        // Reset player position
+        updatePlayerPosition();
+      }
+
+      function startGameTimer() {
+        gameState.gameInterval = setInterval(() => {
+          if (gameState.isGameActive) {
+            gameState.currentTimer = Math.floor(
+              (Date.now() - gameState.gameStartTime) / 1000
+            );
+            elements.timer.textContent = gameState.currentTimer;
+          }
+        }, 100);
+      }
+
+      function playSound(type) {
+        // Create audio context for sound effects
+        try {
+          const audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          switch (type) {
+            case "greenLight":
+              oscillator.frequency.setValueAtTime(
+                800,
+                audioContext.currentTime
+              );
+              gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+              oscillator.start();
+              oscillator.stop(audioContext.currentTime + 0.2);
+              break;
+            case "redLight":
+              oscillator.frequency.setValueAtTime(
+                400,
+                audioContext.currentTime
+              );
+              gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+              oscillator.start();
+              oscillator.stop(audioContext.currentTime + 0.5);
+              break;
+            case "elimination":
+              oscillator.frequency.setValueAtTime(
+                200,
+                audioContext.currentTime
+              );
+              oscillator.frequency.exponentialRampToValueAtTime(
+                100,
+                audioContext.currentTime + 1
+              );
+              gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(
+                0.01,
+                audioContext.currentTime + 1
+              );
+              oscillator.start();
+              oscillator.stop(audioContext.currentTime + 1);
+              break;
+            case "victory":
+              // Play a victory melody
+              [800, 1000, 1200, 1600].forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.frequency.setValueAtTime(
+                  freq,
+                  audioContext.currentTime + i * 0.2
+                );
+                gain.gain.setValueAtTime(
+                  0.1,
+                  audioContext.currentTime + i * 0.2
+                );
+                osc.start(audioContext.currentTime + i * 0.2);
+                osc.stop(audioContext.currentTime + i * 0.2 + 0.2);
+              });
+              break;
+          }
+        } catch (e) {
+          // Fallback if audio context fails
+          console.log("Audio context not available");
+        }
+      }
+
+      // Keyboard controls
+      document.addEventListener("keydown", (e) => {
+        if (!gameState.isGameActive) return;
+
+        switch (e.key) {
+          case "ArrowUp":
+          case "w":
+          case "W":
+            e.preventDefault();
+            movePlayer("up");
+            break;
+          case "ArrowDown":
+          case "s":
+          case "S":
+            e.preventDefault();
+            movePlayer("down");
+            break;
+          case "ArrowLeft":
+          case "a":
+          case "A":
+            e.preventDefault();
+            movePlayer("left");
+            break;
+          case "ArrowRight":
+          case "d":
+          case "D":
+            e.preventDefault();
+            movePlayer("right");
+            break;
+        }
+      });
+
+      // Prevent right-click context menu
+      document.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+      });
+
+      // Initialize progress
+      updateProgress();
+    </script>
+  </body>
+</html>
