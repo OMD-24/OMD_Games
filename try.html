@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Squid Game Doll - Angry Face</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .hair {
+        background-color: #2c2c2c;
+      }
+      .skin {
+        background-color: #f5d6b4;
+      }
+      .shirt {
+        background-color: #facc15;
+      }
+      .dress {
+        background-color: #ec6a1a;
+      }
+      .socks {
+        background-color: #fef08a;
+      }
+      .shoes {
+        background-color: #5a3a2d;
+      }
+      .eye-glow {
+        box-shadow: 0 0 20px 8px #ff0000;
+        animation: pulse-glow 1s infinite;
+      }
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 20px 8px #ff0000;
+        }
+        50% {
+          box-shadow: 0 0 30px 14px #ff0000;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-300 flex items-center justify-center min-h-screen">
+    <div class="relative w-[200px] h-[520px] scale-[0.3]">
+      <!-- Hair Buns -->
+      <div
+        class="absolute top-[90px] left-[5px] w-[40px] h-[40px] rounded-full hair z-30"
+      ></div>
+      <div
+        class="absolute top-[90px] right-[5px] w-[40px] h-[40px] rounded-full hair z-30"
+      ></div>
+
+      <!-- Head with Realistic Angry Face -->
+      <div
+        class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[130px] rounded-full hair z-20 flex items-center justify-center"
+      >
+        <!-- Face Background -->
+        <div
+          class="relative w-[100px] h-[100px] bg-[#f5d6b4] rounded-full flex items-center justify-center"
+        >
+          <!-- Eye Sockets -->
+          <div
+            class="absolute top-[35%] left-[24%] w-[16px] h-[16px] bg-[#c79b82] opacity-40 rounded-full"
+          ></div>
+          <div
+            class="absolute top-[35%] right-[24%] w-[16px] h-[16px] bg-[#c79b82] opacity-40 rounded-full"
+          ></div>
+          <!-- Eyes -->
+          <div
+            class="absolute top-[37%] left-[26%] w-[12px] h-[12px] bg-red-600 rounded-full eye-glow"
+          ></div>
+          <div
+            class="absolute top-[37%] right-[26%] w-[12px] h-[12px] bg-red-600 rounded-full eye-glow"
+          ></div>
+          <!-- Angry Eyebrows -->
+          <div
+            class="absolute top-[28%] left-[20%] w-[26px] h-[5px] bg-black rotate-[-45deg] rounded-full"
+          ></div>
+          <div
+            class="absolute top-[28%] right-[20%] w-[26px] h-[5px] bg-black rotate-[45deg] rounded-full"
+          ></div>
+
+          <!-- Teeth in Frown -->
+          <div
+            class="absolute bottom-[26%] left-1/2 transform -translate-x-1/2 translate-y-1 text-[10px] text-white font-bold"
+          >
+            ■■■
+          </div>
+          <!-- Nose Shadow -->
+          <div
+            class="absolute top-[45%] left-1/2 w-[6px] h-[6px] bg-[#d1a28a] rounded-full transform -translate-x-1/2 opacity-30"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Neck -->
+      <div
+        class="absolute top-[120px] left-1/2 transform -translate-x-1/2 w-[40px] h-[20px] rounded-b-full skin z-10"
+      ></div>
+
+      <!-- Shirt Collar -->
+      <div
+        class="absolute top-[135px] left-1/2 transform -translate-x-1/2 w-[100px] h-[20px] rounded-md shirt z-10"
+      ></div>
+
+      <!-- Arms -->
+      <div
+        class="absolute top-[160px] left-[-10px] w-[35px] h-[130px] rounded-full skin z-0"
+      ></div>
+      <div
+        class="absolute top-[160px] right-[-10px] w-[35px] h-[130px] rounded-full skin z-0"
+      ></div>
+
+      <!-- Palms -->
+      <div
+        class="absolute top-[285px] left-[-15px] w-[25px] h-[25px] rounded-full skin z-10"
+      ></div>
+      <div
+        class="absolute top-[285px] right-[-15px] w-[25px] h-[25px] rounded-full skin z-10"
+      ></div>
+
+      <!-- Combined Shirt + Dress -->
+      <div
+        class="absolute top-[155px] left-1/2 transform -translate-x-1/2 w-[140px] h-[180px] rounded-xl dress z-0"
+      ></div>
+
+      <!-- Legs (Socks) -->
+      <div
+        class="absolute top-[335px] left-[45px] w-[30px] h-[140px] socks rounded-t-full rotate-180 z-0"
+      ></div>
+      <div
+        class="absolute top-[335px] right-[45px] w-[30px] h-[140px] socks rounded-t-full rotate-180 z-0"
+      ></div>
+
+      <!-- Shoes (gap reduced by moving higher) -->
+      <div
+        class="absolute bottom-[10px] left-[30px] w-[50px] h-[30px] shoes rounded-t-xl z-0"
+      ></div>
+      <div
+        class="absolute bottom-[10px] right-[30px] w-[50px] h-[30px] shoes rounded-t-xl z-0"
+      ></div>
+    </div>
+  </body>
+</html>

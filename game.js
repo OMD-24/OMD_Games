@@ -30,6 +30,10 @@ window.addEventListener("DOMContentLoaded", () => {
   elements.victory = document.getElementById("victory");
   elements.finalStats = document.getElementById("finalStats");
   elements.victoryStats = document.getElementById("victoryStats");
+  elements.progressFill1 = document.getElementById("progressFill1");
+  elements.progressText1 = document.getElementById("progressText1");
+  elements.progressFill2 = document.getElementById("progressFill2");
+  elements.progressText2 = document.getElementById("progressText2");
 
   document.querySelectorAll(".control-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -72,9 +76,7 @@ function startGame() {
   startGameTimer();
 
   gameState.isGreenLight = true;
-  elements.lightIndicator.className = "light-indicator bg-green-500";
-  elements.gameStatus.textContent = "GREEN LIGHT - GO!";
-  elements.dollImage.src = "./images/back.png";
+  showGreenLight();
   playAudio("./audios/audio_green.mp3");
   scheduleNextLightChange();
 }
@@ -96,14 +98,10 @@ function toggleLight() {
   gameState.isGreenLight = !gameState.isGreenLight;
 
   if (gameState.isGreenLight) {
-    elements.lightIndicator.className = "light-indicator bg-green-500";
-    elements.gameStatus.textContent = "GREEN LIGHT - GO!";
-    elements.dollImage.src = "./images/back.png";
+    showGreenLight();
     playAudio("./audios/audio_green.mp3");
   } else {
-    elements.lightIndicator.className = "light-indicator bg-red-500";
-    elements.gameStatus.textContent = "RED LIGHT - STOP!";
-    elements.dollImage.src = "./images/front.png";
+    showRedLight();
     playAudio("./audios/audio_red.mp3");
 
     ["player1", "player2"].forEach((playerKey) => {
@@ -125,9 +123,19 @@ function movePlayer(playerKey, direction) {
   if (!gameState.isGameActive) return;
 
   const player = gameState.players[playerKey];
+  const el = elements[playerKey];
   player.lastMoveTime = Date.now();
   player.isMoving = true;
   player.moveCount++;
+
+  // ⬇️ Add bounce class to animate on press
+  el.firstElementChild.classList.add("bounce");
+
+  // Remove it after 200ms
+  setTimeout(() => {
+    el.firstElementChild.classList.remove("bounce");
+    player.isMoving = false;
+  }, 200);
 
   if (!gameState.isGreenLight) {
     eliminatePlayer(playerKey);
@@ -163,7 +171,45 @@ function movePlayer(playerKey, direction) {
     victory(playerKey);
   }
 
+  // Add animations to legs and arms temporarily
+  const armLegSelectors = [".step1", ".step2", ".shin1", ".shin2"];
+
+  // Add step/shin classes dynamically
+  armLegSelectors.forEach((sel) => {
+    el.querySelectorAll(sel.replace(".", "")).forEach((part) => {
+      part.classList.add(sel.replace(".", ""));
+    });
+  });
+
+  // Remove after 200ms
   setTimeout(() => {
+    el.classList.remove("bounce");
+    armLegSelectors.forEach((sel) => {
+      el.querySelectorAll(sel.replace(".", "")).forEach((part) => {
+        part.classList.remove(sel.replace(".", ""));
+      });
+    });
+    player.isMoving = false;
+  }, 200);
+
+  // Animate head, arms, legs
+  el.firstElementChild.classList.add("bounce");
+  el.querySelectorAll(".arm").forEach((arm) =>
+    arm.classList.add("step1", "step2")
+  );
+  el.querySelectorAll(".leg").forEach((leg) =>
+    leg.classList.add("shin1", "shin2")
+  );
+
+  // Remove after short delay
+  setTimeout(() => {
+    el.firstElementChild.classList.remove("bounce");
+    el.querySelectorAll(".arm").forEach((arm) =>
+      arm.classList.remove("step1", "step2")
+    );
+    el.querySelectorAll(".leg").forEach((leg) =>
+      leg.classList.remove("shin1", "shin2")
+    );
     player.isMoving = false;
   }, 200);
 }
@@ -176,15 +222,14 @@ function updatePlayerPosition(playerKey) {
 }
 
 function updateProgress() {
-  const avgProgress =
-    (Object.values(gameState.players).reduce(
-      (sum, p) => sum + (90 - p.y) / 75,
-      0
-    ) /
-      2) *
-    100;
-  elements.progressFill.style.width = avgProgress + "%";
-  elements.progressText.textContent = Math.round(avgProgress) + "%";
+  const player1Progress = ((90 - gameState.players.player1.y) / 75) * 100;
+  const player2Progress = ((90 - gameState.players.player2.y) / 75) * 100;
+
+  elements.progressFill1.style.width = player1Progress + "%";
+  elements.progressText1.textContent = Math.round(player1Progress) + "%";
+
+  elements.progressFill2.style.width = player2Progress + "%";
+  elements.progressText2.textContent = Math.round(player2Progress) + "%";
 }
 
 function eliminatePlayer(playerKey) {
@@ -248,9 +293,16 @@ function startGameTimer() {
   }, 100);
 }
 
+let currentAudio = null;
+
 function playAudio(path) {
-  const audio = new Audio(path);
-  audio.play().catch(() => {});
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  currentAudio = new Audio(path);
+  currentAudio.play().catch(() => {});
 }
 
 document.addEventListener("keydown", (e) => {
@@ -287,3 +339,31 @@ document.addEventListener("keydown", (e) => {
       break;
   }
 });
+
+function getAngryDollHTML() {
+  return `
+  <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[130px] rounded-full hair z-20 flex items-center justify-center">
+    <div class="relative w-[100px] h-[100px] bg-[#f5d6b4] rounded-full flex items-center justify-center">
+      <div class="absolute top-[35%] left-[24%] w-[16px] h-[16px] bg-[#c79b82] opacity-40 rounded-full"></div>
+      <div class="absolute top-[35%] right-[24%] w-[16px] h-[16px] bg-[#c79b82] opacity-40 rounded-full"></div>
+      <div class="absolute top-[37%] left-[26%] w-[12px] h-[12px] bg-red-600 rounded-full eye-glow"></div>
+      <div class="absolute top-[37%] right-[26%] w-[12px] h-[12px] bg-red-600 rounded-full eye-glow"></div>
+      <div class="absolute top-[28%] left-[20%] w-[26px] h-[5px] bg-black rotate-[-45deg] rounded-full"></div>
+      <div class="absolute top-[28%] right-[20%] w-[26px] h-[5px] bg-black rotate-[45deg] rounded-full"></div>
+      <div class="absolute bottom-[26%] left-1/2 transform -translate-x-1/2 translate-y-1 text-[10px] text-white font-bold">■■■</div>
+      <div class="absolute top-[45%] left-1/2 w-[6px] h-[6px] bg-[#d1a28a] rounded-full transform -translate-x-1/2 opacity-30"></div>
+    </div>
+  </div>`;
+}
+
+function showGreenLight() {
+  elements.lightIndicator.className = "w-5 h-5 rounded-full bg-green-500";
+  elements.gameStatus.textContent = "GREEN LIGHT - GO!";
+  elements.dollImage.innerHTML = `<div class='w-[100px] h-[100px] rounded-full hair relative'></div>`;
+}
+
+function showRedLight() {
+  elements.lightIndicator.className = "w-5 h-5 rounded-full bg-red-500";
+  elements.gameStatus.textContent = "RED LIGHT - STOP!";
+  elements.dollImage.innerHTML = getAngryDollHTML();
+}

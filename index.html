@@ -3,253 +3,350 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>오징어 게임 | Squid Game</title>
+    <title>Red Light Green Light</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap");
 
-      body {
-        font-family: "Noto Sans KR", sans-serif;
-        cursor: crosshair;
-      }
-
-      .float {
-        animation: float 6s ease-in-out infinite;
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0px) rotate(0deg);
-        }
-        50% {
-          transform: translateY(-20px) rotate(180deg);
-        }
-      }
-
-      .glitch {
-        animation: glitch 2s infinite;
-      }
-
-      @keyframes glitch {
-        0% {
-          transform: translate(0);
-        }
-        20% {
-          transform: translate(-2px, 2px);
-        }
-        40% {
-          transform: translate(-2px, -2px);
-        }
-        60% {
-          transform: translate(2px, 2px);
-        }
-        80% {
-          transform: translate(2px, -2px);
-        }
-        100% {
-          transform: translate(0);
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="bg-black text-white overflow-x-hidden relative">
-    <!-- Background Gradient -->
+  <body class="bg-gray-400 min-h-screen overflow-hidden select-none">
+    <!-- Doll -->
     <div
-      class="fixed top-0 left-0 w-full h-full bg-gradient-to-br from-gray-900 via-green-800 to-pink-700 -z-10"
-    ></div>
+      class="absolute top-4 left-1/2 transform -translate-x-1/2 z-40 scale-[0.4]"
+    >
+      <div class="relative w-[200px] h-[520px]">
+        <!-- Face placeholder -->
+        <div
+          id="dollImage"
+          class="absolute top-[20px] left-1/2 transform -translate-x-1/2 w-[120px] h-[130px] rounded-full z-20 flex items-center justify-center"
+        ></div>
 
-    <!-- Animated Shapes -->
-    <div class="fixed w-full h-full opacity-10 -z-10">
-      <div
-        class="absolute top-[20%] left-10 w-20 h-20 border-2 border-pink-500 rounded-full float"
-      ></div>
-      <div
-        class="absolute bottom-1/4 right-16 w-0 h-0 border-l-[40px] border-r-[40px] border-b-[70px] border-b-pink-500 float"
-      ></div>
-      <div
-        class="absolute top-1/3 right-1/4 w-[70px] h-[70px] border-2 border-pink-500 float"
-      ></div>
+        <!-- Hair Buns - Place AFTER face so they are layered on top -->
+        <div
+          class="absolute top-[90px] left-[5px] w-[40px] h-[40px] rounded-full hair z-40"
+        ></div>
+        <div
+          class="absolute top-[90px] right-[5px] w-[40px] h-[40px] rounded-full hair z-40"
+        ></div>
+
+        <!-- Neck -->
+        <div
+          class="absolute top-[120px] left-1/2 transform -translate-x-1/2 w-[40px] h-[20px] rounded-b-full skin z-10"
+        ></div>
+
+        <!-- Shirt Collar -->
+        <div
+          class="absolute top-[135px] left-1/2 transform -translate-x-1/2 w-[100px] h-[20px] rounded-md shirt z-10"
+        ></div>
+
+        <!-- Arms -->
+        <div
+          class="absolute top-[160px] left-[-10px] w-[35px] h-[130px] rounded-full skin z-0"
+        ></div>
+        <div
+          class="absolute top-[160px] right-[-10px] w-[35px] h-[130px] rounded-full skin z-0"
+        ></div>
+
+        <!-- Palms -->
+        <div
+          class="absolute top-[285px] left-[-15px] w-[25px] h-[25px] rounded-full skin z-10"
+        ></div>
+        <div
+          class="absolute top-[285px] right-[-15px] w-[25px] h-[25px] rounded-full skin z-10"
+        ></div>
+
+        <!-- Combined Shirt + Dress -->
+        <div
+          class="absolute top-[155px] left-1/2 transform -translate-x-1/2 w-[140px] h-[180px] rounded-xl dress z-0"
+        ></div>
+
+        <!-- Legs (Socks Rotated) -->
+        <div
+          class="absolute top-[335px] left-[45px] w-[30px] h-[140px] socks rounded-t-full rotate-180 z-0"
+        ></div>
+        <div
+          class="absolute top-[335px] right-[45px] w-[30px] h-[140px] socks rounded-t-full rotate-180 z-0"
+        ></div>
+
+        <!-- Shoes -->
+        <div
+          class="absolute bottom-[10px] left-[30px] w-[50px] h-[30px] shoes rounded-t-xl z-0"
+        ></div>
+        <div
+          class="absolute bottom-[10px] right-[30px] w-[50px] h-[30px] shoes rounded-t-xl z-0"
+        ></div>
+      </div>
     </div>
 
-    <!-- Header -->
-    <header
-      class="fixed w-full top-0 bg-black/90 backdrop-blur-lg z-50 px-8 py-4"
+    <div
+      id="instructions"
+      class="fixed inset-0 bg-black bg-opacity-90 text-white flex items-center justify-center z-50"
     >
-      <nav class="flex justify-between items-center">
-        <a
-          href="#"
-          class="text-2xl font-extrabold text-pink-500 tracking-widest"
-          >오징어 게임</a
-        >
-        <ul class="flex gap-6 text-white">
-          <li>
-            <a
-              href="#games"
-              class="hover:text-green-400 relative after:block after:h-0.5 after:w-0 hover:after:w-full after:bg-green-400 after:transition-all"
-              >Games</a
-            >
-          </li>
-          <li>
-            <a
-              href="#rules"
-              class="hover:text-green-400 relative after:block after:h-0.5 after:w-0 hover:after:w-full after:bg-green-400 after:transition-all"
-              >Rules</a
-            >
-          </li>
-          <li>
-            <a
-              href="#survival"
-              class="hover:text-green-400 relative after:block after:h-0.5 after:w-0 hover:after:w-full after:bg-green-400 after:transition-all"
-              >Survival</a
-            >
-          </li>
-          <li>
-            <a
-              href="#prizes"
-              class="hover:text-green-400 relative after:block after:h-0.5 after:w-0 hover:after:w-full after:bg-green-400 after:transition-all"
-              >Prizes</a
-            >
-          </li>
-        </ul>
-      </nav>
-    </header>
-
-    <!-- Hero -->
-    <main class="pt-32 text-center px-4">
-      <section class="max-w-4xl mx-auto py-20">
-        <h1
-          class="text-7xl font-black bg-gradient-to-r from-pink-500 to-green-500 bg-clip-text text-transparent glitch"
-        >
-          SQUID GAME
-        </h1>
-        <h2 class="text-3xl text-gray-300 mt-4">오징어 게임</h2>
-        <p class="mt-6 text-gray-400 text-lg leading-relaxed">
-          Welcome to the ultimate survival competition where childhood games
-          become deadly challenges. 456 players, one winner, 45.6 billion won
-          prize. Do you have what it takes to survive?
-        </p>
-      </section>
-
-      <!-- Games Section -->
-      <section id="games" class="py-20 bg-white/5 backdrop-blur-md">
-        <h2 class="text-4xl text-green-400 mb-16">THE GAMES</h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto px-4"
-        >
-          <!-- Game Cards -->
-          <div
-            class="p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition border border-transparent hover:border-pink-500"
-          >
-            <div class="text-4xl font-extrabold text-pink-500 mb-4">01</div>
-            <h3 class="text-2xl font-bold mb-1">Red Light, Green Light</h3>
-            <p class="text-green-400 mb-3">무궁화 꽃이 피었습니다</p>
-            <p class="text-gray-300 text-sm">
-              Move when the doll says "Green Light", freeze when it says "Red
-              Light". Get caught moving and you're eliminated.
-            </p>
-          </div>
-
-          <div
-            class="p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition border border-transparent hover:border-pink-500"
-          >
-            <div class="text-4xl font-extrabold text-pink-500 mb-4">02</div>
-            <h3 class="text-2xl font-bold mb-1">Sugar Honeycombs</h3>
-            <p class="text-green-400 mb-3">달고나</p>
-            <p class="text-gray-300 text-sm">
-              Extract the shape from the sugar honeycomb without breaking it.
-              Choose your shape wisely — some are easier than others.
-            </p>
-          </div>
-
-          <div
-            class="p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition border border-transparent hover:border-pink-500"
-          >
-            <div class="text-4xl font-extrabold text-pink-500 mb-4">03</div>
-            <h3 class="text-2xl font-bold mb-1">Tug of War</h3>
-            <p class="text-green-400 mb-3">줄다리기</p>
-            <p class="text-gray-300 text-sm">
-              Team strategy is everything. Pull together or fall together. The
-              losing team faces elimination.
-            </p>
-          </div>
-
-          <div
-            class="p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition border border-transparent hover:border-pink-500"
-          >
-            <div class="text-4xl font-extrabold text-pink-500 mb-4">04</div>
-            <h3 class="text-2xl font-bold mb-1">Marbles</h3>
-            <p class="text-green-400 mb-3">구슬치기</p>
-            <p class="text-gray-300 text-sm">
-              Play any marble game with your partner. Winner takes all. Loser
-              gets eliminated.
-            </p>
-          </div>
-
-          <div
-            class="p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition border border-transparent hover:border-pink-500"
-          >
-            <div class="text-4xl font-extrabold text-pink-500 mb-4">05</div>
-            <h3 class="text-2xl font-bold mb-1">Glass Bridge</h3>
-            <p class="text-green-400 mb-3">유리다리</p>
-            <p class="text-gray-300 text-sm">
-              Cross the bridge by choosing the right glass panels. One leads to
-              safety, the other to death.
-            </p>
-          </div>
-
-          <div
-            class="p-6 rounded-2xl bg-white/5 hover:bg-white/10 transition border border-transparent hover:border-pink-500"
-          >
-            <div class="text-4xl font-extrabold text-pink-500 mb-4">06</div>
-            <h3 class="text-2xl font-bold mb-1">Squid Game</h3>
-            <p class="text-green-400 mb-3">오징어게임</p>
-            <p class="text-gray-300 text-sm">
-              The final game. Attack and defend in this ultimate childhood
-              battle. Only one can claim victory.
-            </p>
-          </div>
+      <!-- Instruction Box -->
+      <div
+        class="bg-white text-black p-6 rounded-2xl shadow-2xl border-4 border-pink-500 max-w-md w-full mx-4 text-center"
+      >
+        <h3 class="text-3xl text-pink-600 font-extrabold mb-4 tracking-wide">
+          Red Light, Green Light
+        </h3>
+        <div class="text-left text-sm md:text-base space-y-2 mb-6">
+          <p>
+            <strong>🟢 Green Light:</strong> Move forward using arrow keys or
+            buttons
+          </p>
+          <p>
+            <strong>🔴 Red Light:</strong> STOP! Don’t move or you're eliminated
+          </p>
+          <p><strong>🎯 Goal:</strong> Reach the finish line (top of screen)</p>
+          <p>
+            <strong>⚠️ Warning:</strong> The doll can see <em>any</em> movement
+            during red light!
+          </p>
         </div>
-      </section>
-
-      <!-- CTA Button -->
-      <section class="py-20">
         <button
           onclick="startGame()"
-          class="relative inline-block px-10 py-4 text-lg font-bold text-white bg-gradient-to-r from-pink-500 to-red-700 rounded-full shadow-lg hover:shadow-2xl transition-all overflow-hidden"
+          class="modal-button bg-pink-600 text-white px-6 py-2 rounded-full hover:bg-pink-700"
         >
-          <span class="relative z-10">Enter the Game</span>
-          <span
-            class="absolute left-0 top-0 w-full h-full bg-white/10 animate-pulse z-0"
-          ></span>
+          Start Game
         </button>
-      </section>
-    </main>
+      </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-black/80 text-center py-8 border-t border-gray-700">
-      <p class="text-gray-500 text-sm">
-        © 2024 Squid Game. All players eliminated. No survivors guaranteed.
-      </p>
-    </footer>
+    <div
+      class="absolute top-5 left-5 bg-black bg-opacity-80 text-white p-4 rounded-xl z-50"
+    >
+      <div class="flex items-center gap-2">
+        <span
+          id="lightIndicator"
+          class="w-5 h-5 rounded-full bg-gray-400"
+        ></span>
+        <span id="gameStatus">Ready to Start</span>
+      </div>
+      <div class="mt-2">Time Left: <span id="timer">45.6</span>s</div>
+    </div>
 
-    <script>
-      function startGame() {
-        const messages = [
-          "Player registered. Awaiting transport...",
-          "Welcome to the games. Good luck.",
-          "Remember: You can leave anytime... if you survive.",
-          "The games will begin shortly.",
-          "456 players entered. How many will survive?",
-        ];
-        alert(messages[Math.floor(Math.random() * messages.length)]);
+    <!-- Player Progress: Player 1 -->
+    <div
+      class="absolute bottom-5 left-1/4 transform -translate-x-1/2 bg-black bg-opacity-80 text-white p-4 rounded-xl z-50 w-48"
+    >
+      <div>Player 1 Progress</div>
+      <div class="w-full h-4 bg-gray-700 rounded mt-2">
+        <div id="progressFill1" class="h-full bg-green-500 rounded w-0"></div>
+      </div>
+      <div id="progressText1" class="text-xs mt-1">0%</div>
+    </div>
 
-        // Add glitch effect to body
-        document.body.classList.add("glitch");
-        setTimeout(() => {
-          document.body.classList.remove("glitch");
-        }, 300);
-      }
-    </script>
+    <!-- Player Progress: Player 2 -->
+    <div
+      class="absolute bottom-5 right-1/4 transform translate-x-1/2 bg-black bg-opacity-80 text-white p-4 rounded-xl z-50 w-48"
+    >
+      <div>Player 2 Progress</div>
+      <div class="w-full h-4 bg-gray-700 rounded mt-2">
+        <div id="progressFill2" class="h-full bg-blue-500 rounded w-0"></div>
+      </div>
+      <div id="progressText2" class="text-xs mt-1">0%</div>
+    </div>
+
+    <!-- Player 1 -->
+    <div
+      id="player1"
+      class="absolute bottom-12 left-1/3 -translate-x-1/2 z-10 scale-[0.3] origin-bottom"
+    >
+      <div class="flex flex-col items-center space-y-1 relative">
+        <div class="w-20 h-20 bg-[#fad6b4] rounded-full relative">
+          <div class="absolute top-0 w-full h-10 bg-black rounded-t-full"></div>
+        </div>
+        <div
+          class="relative w-16 h-20 bg-green-700 rounded-md shadow-md text-white text-xs font-bold flex items-center justify-center"
+        >
+          <div class="absolute top-1">456</div>
+        </div>
+        <div class="absolute top-[90px] flex justify-between w-[88px]">
+          <div class="flex flex-col items-center relative arm">
+            <div class="w-3 h-14 bg-green-700 rounded-full"></div>
+            <div class="w-2.5 h-2.5 bg-white rounded-full mt-1"></div>
+          </div>
+          <div class="flex flex-col items-center relative arm">
+            <div class="w-3 h-14 bg-green-700 rounded-full"></div>
+            <div class="w-2.5 h-2.5 bg-white rounded-full mt-1"></div>
+          </div>
+        </div>
+        <div class="flex space-x-6 mt-2 items-start relative">
+          <div class="flex flex-col items-center space-y-0 relative leg">
+            <div class="w-4 h-12 bg-green-700 rounded-md"></div>
+            <div class="w-4 h-8 bg-green-700 rounded-md"></div>
+            <div class="w-5 h-3 bg-white rounded-md mt-1"></div>
+          </div>
+          <div class="flex flex-col items-center space-y-0 relative leg">
+            <div class="w-4 h-12 bg-green-700 rounded-md"></div>
+            <div class="w-4 h-8 bg-green-700 rounded-md"></div>
+            <div class="w-5 h-3 bg-white rounded-md mt-1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player 2 -->
+    <div
+      id="player2"
+      class="absolute bottom-12 left-2/3 -translate-x-1/2 z-10 scale-[0.3] origin-bottom"
+    >
+      <div class="flex flex-col items-center space-y-1 relative">
+        <div class="w-20 h-20 bg-[#fad6b4] rounded-full relative">
+          <div class="absolute top-0 w-full h-10 bg-black rounded-t-full"></div>
+        </div>
+        <div
+          class="relative w-16 h-20 bg-blue-700 rounded-md shadow-md text-white text-xs font-bold flex items-center justify-center"
+        >
+          <div class="absolute top-1">456</div>
+        </div>
+        <div class="absolute top-[90px] flex justify-between w-[88px]">
+          <div class="flex flex-col items-center relative arm">
+            <div class="w-3 h-14 bg-blue-700 rounded-full"></div>
+            <div class="w-2.5 h-2.5 bg-white rounded-full mt-1"></div>
+          </div>
+          <div class="flex flex-col items-center relative arm">
+            <div class="w-3 h-14 bg-blue-700 rounded-full"></div>
+            <div class="w-2.5 h-2.5 bg-white rounded-full mt-1"></div>
+          </div>
+        </div>
+        <div class="flex space-x-6 mt-2 items-start relative">
+          <div class="flex flex-col items-center space-y-0 relative leg">
+            <div class="w-4 h-12 bg-blue-700 rounded-md"></div>
+            <div class="w-4 h-8 bg-blue-700 rounded-md"></div>
+            <div class="w-5 h-3 bg-white rounded-md mt-1"></div>
+          </div>
+          <div class="flex flex-col items-center space-y-0 relative leg">
+            <div class="w-4 h-12 bg-blue-700 rounded-md"></div>
+            <div class="w-4 h-8 bg-blue-700 rounded-md"></div>
+            <div class="w-5 h-3 bg-white rounded-md mt-1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME OVER MODAL -->
+    <div
+      id="gameOver"
+      class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-90 text-white z-[1000]"
+    >
+      <div
+        class="text-center p-8 border-4 border-pink-500 rounded-lg bg-black shadow-xl"
+      >
+        <h2 class="text-5xl text-pink-500 font-extrabold mb-4 tracking-widest">
+          ELIMINATED!
+        </h2>
+        <p class="text-lg text-gray-300 mb-2">
+          The doll saw you moving during red light!
+        </p>
+        <p id="finalStats" class="text-white text-sm italic mb-4"></p>
+        <button
+          onclick="restartGame()"
+          class="modal-button bg-pink-600 text-white px-6 py-2 rounded-full hover:bg-pink-700"
+        >
+          Try Again
+        </button>
+      </div>
+    </div>
+
+    <!-- VICTORY MODAL -->
+    <div
+      id="victory"
+      class="fixed inset-0 hidden items-center justify-center bg-gradient-to-br from-pink-100 via-white to-pink-200 text-black z-[1000]"
+    >
+      <div
+        class="text-center p-8 border-4 border-black rounded-lg bg-white shadow-xl"
+      >
+        <h2
+          class="text-4xl font-black text-pink-600 animate-pulse mb-4 tracking-wide"
+        >
+          CONGRATULATIONS!
+        </h2>
+        <p class="text-gray-800 text-lg mb-2">You survived the game!</p>
+        <p id="victoryStats" class="text-black text-sm italic mb-4"></p>
+        <button
+          onclick="restartGame()"
+          class="modal-button bg-black text-white px-6 py-2 rounded-full hover:bg-pink-700"
+        >
+          Play Again
+        </button>
+      </div>
+    </div>
+
+    <script src="game.js" defer></script>
+    <!-- Floating WASD Controls (Left) -->
+    <div
+      class="fixed bottom-20 left-4 z-50 bg-white bg-opacity-80 p-3 rounded-xl shadow-lg"
+    >
+      <div class="flex flex-col items-center space-y-1">
+        <button
+          data-player="player1"
+          data-dir="up"
+          class="control-btn bg-green-600 text-white w-10 h-10 rounded"
+        >
+          ↑
+        </button>
+        <div class="flex space-x-1">
+          <button
+            data-player="player1"
+            data-dir="left"
+            class="control-btn bg-green-600 text-white w-10 h-10 rounded"
+          >
+            ←
+          </button>
+          <button
+            data-player="player1"
+            data-dir="down"
+            class="control-btn bg-green-600 text-white w-10 h-10 rounded"
+          >
+            ↓
+          </button>
+          <button
+            data-player="player1"
+            data-dir="right"
+            class="control-btn bg-green-600 text-white w-10 h-10 rounded"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Arrow Controls (Right) -->
+    <div
+      class="fixed bottom-20 right-4 z-50 bg-white bg-opacity-80 p-3 rounded-xl shadow-lg"
+    >
+      <div class="flex flex-col items-center space-y-1">
+        <button
+          data-player="player2"
+          data-dir="up"
+          class="control-btn bg-blue-500 text-white w-10 h-10 rounded"
+        >
+          ↑
+        </button>
+        <div class="flex space-x-1">
+          <button
+            data-player="player2"
+            data-dir="left"
+            class="control-btn bg-blue-500 text-white w-10 h-10 rounded"
+          >
+            ←
+          </button>
+          <button
+            data-player="player2"
+            data-dir="down"
+            class="control-btn bg-blue-500 text-white w-10 h-10 rounded"
+          >
+            ↓
+          </button>
+          <button
+            data-player="player2"
+            data-dir="right"
+            class="control-btn bg-blue-500 text-white w-10 h-10 rounded"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
